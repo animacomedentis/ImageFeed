@@ -82,9 +82,9 @@
 				D5BB222C2B20CDDD0092A8CA /* ImagesList */,
 				75B49AB72B500C640036BC78 /* Profile */,
 				D5F40A4C2B1F31990047F1AC /* Assets.xcassets */,
+				751E2E792B2C9217007A9A64 /* Main.storyboard */,
 				D5F40A4E2B1F31990047F1AC /* LaunchScreen.storyboard */,
 				D5F40A512B1F31990047F1AC /* Info.plist */,
-				751E2E792B2C9217007A9A64 /* Main.storyboard */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";

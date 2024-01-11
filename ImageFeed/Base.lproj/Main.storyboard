@@ -113,7 +113,6 @@
                                 <state key="normal" image="logout_button"/>
                                 <connections>
                                     <action selector="didTapLogoutButton" destination="YID-7w-evW" eventType="touchUpInside" id="wRw-l8-ABw"/>
-                                    <action selector="didTapLogoutButton:" destination="YID-7w-evW" eventType="touchUpInside" id="bWB-8G-e6j"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@ekaterina_nov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gLE-yq-Zev">
@@ -168,7 +167,6 @@
                         <outlet property="descriptionLabel" destination="omk-Ic-qZT" id="Xop-H5-lNh"/>
                         <outlet property="loginNameLabel" destination="gLE-yq-Zev" id="gOC-8A-RJS"/>
                         <outlet property="logoutButton" destination="H5T-pf-Mhz" id="Tsw-6y-zzr"/>
-                        <outlet property="nameLabel" destination="P86-BF-bdZ" id="WAP-0c-l6N"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hat-DG-skt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
