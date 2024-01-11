@@ -1,6 +1,6 @@
 import UIKit
 
-final class ProfileViewController{
+final class ProfileViewController:UIViewController {
     @IBOutlet private var avatarImageView: UIImageView!
     @IBOutlet private var NameLabel: UILabel!
     @IBOutlet private var loginNameLabel: UILabel!
