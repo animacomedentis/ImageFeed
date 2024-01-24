@@ -15,6 +15,9 @@ final class SingleImageViewController: UIViewController {
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }
+    @IBAction private func didTapShareButton() {
+        print("share button")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
