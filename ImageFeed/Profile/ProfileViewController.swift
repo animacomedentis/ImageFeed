@@ -17,10 +17,12 @@ final class ProfileViewController:UIViewController {
         let userName = UILabel()
         userName.text = "@ekaterina_nov"
         userName.textColor = .ypWhiteAlpha50
+        userName.font = UIFont.systemFont(ofSize: 13)
         
         let userMassage = UILabel()
         userMassage.text = "Hello, world!"
         userMassage.textColor = .ypWhite
+        userMassage.font = UIFont.systemFont(ofSize: 13)
         
         let logoutButtonImage = UIImage(named: "logout_button")
         let logoutButton = UIButton.systemButton(with: logoutButtonImage!, target: self, action: #selector(Self.didTapLogoutButton))
@@ -55,6 +57,8 @@ final class ProfileViewController:UIViewController {
             userMassage.leadingAnchor.constraint(equalTo: avatar.leadingAnchor),
             userMassage.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 8),
             //logoutButton
+            logoutButton.widthAnchor.constraint(equalToConstant: 40),
+            logoutButton.heightAnchor.constraint(equalToConstant: 40),
             logoutButton.centerYAnchor.constraint(equalTo: avatar.centerYAnchor),
             logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])

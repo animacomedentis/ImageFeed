@@ -21,15 +21,15 @@ class ImagesListViewController: UIViewController {
     }()
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            if segue.identifier == ShowSingleImageSegueIdentifier {
-                let viewController = segue.destination as! SingleImageViewController
-                let indexPath = sender as! IndexPath
-                let image = UIImage(named: photosName[indexPath.row])
+        if segue.identifier == ShowSingleImageSegueIdentifier {
+            if let viewController = segue.destination as? SingleImageViewController,
+               let indexPath = sender as? IndexPath,
+               let image = UIImage(named: photosName[indexPath.row]){
                 viewController.image = image
-            } else {
-                super.prepare(for: segue, sender: sender) 
             }
         }
+    }
+    
 }//ImagesListViewController
 
 extension ImagesListViewController: UITableViewDataSource {
@@ -50,7 +50,7 @@ extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return 0
