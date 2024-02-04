@@ -1,16 +1,10 @@
-//
-//  ViewController.swift
-//  ImageFeed
-//
-//  Created by Максим Петров on 05.12.2023.
-//
-
 import UIKit
 
 class ImagesListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
     
     private var photosName = [String]()
+    private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     
     //MARK: viewDidLoad
     override func viewDidLoad() {
@@ -25,6 +19,16 @@ class ImagesListViewController: UIViewController {
         formatter.timeStyle = .none
         return formatter
     }()
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == ShowSingleImageSegueIdentifier {
+            if let viewController = segue.destination as? SingleImageViewController,
+               let indexPath = sender as? IndexPath,
+               let image = UIImage(named: photosName[indexPath.row]){
+                viewController.image = image
+            }
+        }
+    }
     
 }//ImagesListViewController
 
@@ -43,8 +47,10 @@ extension ImagesListViewController: UITableViewDataSource {
 }
 
 extension ImagesListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return 0
@@ -72,3 +78,5 @@ extension ImagesListViewController {
         cell.likeButton.setImage(likeImage, for: .normal)
     }
 }
+
+
