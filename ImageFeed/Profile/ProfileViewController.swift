@@ -2,10 +2,10 @@ import UIKit
 
 final class ProfileViewController:UIViewController {
     override func viewDidLoad() {
-        profiveView()
+        profileView()
     }
     
-    private func profiveView(){
+    private func profileView(){
         let avatarImage = UIImage(named: "avatar")
         let avatar = UIImageView(image: avatarImage)
         
