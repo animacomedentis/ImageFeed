@@ -201,6 +201,9 @@
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="Prn-fT-HQW"/>
+                    <connections>
+                        <segue destination="2L0-uA-YMJ" kind="presentation" identifier="ShowWebView" modalPresentationStyle="overFullScreen" id="hbG-4P-A5h"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZWZ-Yl-yD2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -216,6 +219,7 @@
                         <viewLayoutGuide key="safeArea" id="qgL-SO-yf3"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="6yu-tW-qJs"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="REb-Up-6du" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
