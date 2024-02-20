@@ -16,9 +16,9 @@ final class OAuth2Service {
             fatalError("Failed to make urlComponents from \(AccessTokenURL)")
         }
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: AccessKey),
-            URLQueryItem(name: "client_secret", value: SecretKey),
-            URLQueryItem(name: "redirect_uri", value: RedirectURI),
+            URLQueryItem(name: "client_id", value: Constant.AccessKey),
+            URLQueryItem(name: "client_secret", value: Constant.SecretKey),
+            URLQueryItem(name: "redirect_uri", value: Constant.RedirectURI),
             URLQueryItem(name: "code", value: code),
             URLQueryItem(name: "grant_type", value: "authorization_code")
         ]

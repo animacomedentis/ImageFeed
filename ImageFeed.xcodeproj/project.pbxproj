@@ -135,13 +135,13 @@
 		D5F40A422B1F31980047F1AC /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
-				7543451E2B84E97500F662D7 /* SplashViewController */,
-				7543451B2B84D59300F662D7 /* Models */,
 				D5F40A432B1F31980047F1AC /* AppDelegate.swift */,
 				D5F40A452B1F31980047F1AC /* SceneDelegate.swift */,
 				759F37C52B7516D70000B528 /* Constant.swift */,
+				7543451E2B84E97500F662D7 /* SplashViewController */,
 				759F37CE2B7A56740000B528 /* Auth */,
 				754345162B84CF3500F662D7 /* OAuth2 */,
+				7543451B2B84D59300F662D7 /* Models */,
 				D5BB222C2B20CDDD0092A8CA /* ImagesList */,
 				7584576D2B517490006EF9E1 /* SingleImageView */,
 				75B49AB72B500C640036BC78 /* Profile */,

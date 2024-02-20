@@ -46,14 +46,14 @@ final class SplashViewController: UIViewController {
     private func setupSplashViewController() {
         
         view.backgroundColor = .ypBlack
-
+        
         //MARK: logo
         let imageLogo = UIImage(named: "logo_practicum")
         let logo = UIImageView(image: imageLogo)
         logo.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logo)
         
-       NSLayoutConstraint.activate([
+        NSLayoutConstraint.activate([
             logo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             logo.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             logo.widthAnchor.constraint(equalToConstant: 75),

@@ -63,7 +63,7 @@ final class ProfileViewController:UIViewController {
             logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
-    //функционал кнопки выхода из профиля
+    //TODO: функционал кнопки выхода из профиля
     @objc
     private func didTapLogoutButton(){
         
