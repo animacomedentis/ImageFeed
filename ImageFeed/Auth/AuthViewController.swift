@@ -1,8 +1,14 @@
 import UIKit
 
+protocol AuthViewControllerDelegate: AnyObject {
+    func authViewController(_ vc: AuthViewController, didAAuthViewController code: String)
+}
+
 final class AuthViewController: UIViewController{
     private let ShowWebViewSegueIdentifier = "ShowWebView"
-
+    
+    weak var delegate: AuthViewControllerDelegate?
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == ShowWebViewSegueIdentifier {
             guard
@@ -15,10 +21,12 @@ final class AuthViewController: UIViewController{
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         showAuthView()
     }
     
     private func showAuthView(){
+        
         let authViewLogoImage = UIImage(named: "auth_screen_logo")
         let authViewLogo = UIImageView(image: authViewLogoImage)
         
@@ -58,7 +66,7 @@ final class AuthViewController: UIViewController{
 }
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        //TODO: process code
+        delegate?.authViewController(self, didAAuthViewController: code)
     }
 
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {

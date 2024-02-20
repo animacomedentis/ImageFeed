@@ -10,30 +10,23 @@ protocol WebViewViewControllerDelegate: AnyObject {
 
 final class WebViewViewController: UIViewController{
     
-    weak var delegate: WebViewViewControllerDelegate?
-    
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var progress: UIProgressView!
+    weak var delegate: WebViewViewControllerDelegate?
     
     //MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
         webView.navigationDelegate = self
+        webViewSetup()
+        makeRequest()
         
-        //MARK: webView
-        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: AccessKey),
-            URLQueryItem(name: "redirect_uri", value: RedirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: AccessScope)
-        ]
-        let url = urlComponents.url!
-        let request = URLRequest(url: url)
+    }
+    
+    //MARK: viewsetup
+    private func webViewSetup() {
         webView.frame = view.frame
-        webView.load(request)
-        updateProgress()
         
         //MARK: backButton
         let backButtonImage = UIImage(named: "nav_back_button")
@@ -44,6 +37,8 @@ final class WebViewViewController: UIViewController{
         
         //MARK: progress
         progress.progressTintColor = .ypBlack
+        progress.progress = 0.0
+        progress.isHidden = true
         progress.translatesAutoresizingMaskIntoConstraints = false
         
         //MARK: constraint
@@ -56,6 +51,24 @@ final class WebViewViewController: UIViewController{
             progress.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             progress.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+    //MARK: Request
+    private func makeRequest() {
+        guard var urlComponents = URLComponents(string: UnsplashAuthorizeURLString) else {
+            fatalError("Failed to make urlComponents")
+        }
+        urlComponents.queryItems = [
+            URLQueryItem(name: "client_id", value: AccessKey),
+            URLQueryItem(name: "redirect_uri", value: RedirectURI),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "scope", value: AccessScope)
+        ]
+        if let url = urlComponents.url{
+            let request = URLRequest(url: url)
+            webView.load(request)
+        }else {
+            fatalError("Failed to make URL")
+        }
     }
     
     @objc
