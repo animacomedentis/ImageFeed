@@ -2,10 +2,10 @@ import UIKit
 
 final class ProfileViewController:UIViewController {
     override func viewDidLoad() {
-        profiveView()
+        profileView()
     }
     
-    private func profiveView(){
+    private func profileView(){
         let avatarImage = UIImage(named: "avatar")
         let avatar = UIImageView(image: avatarImage)
         
@@ -63,7 +63,7 @@ final class ProfileViewController:UIViewController {
             logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
-    //функционал кнопки выхода из профиля
+    //TODO: функционал кнопки выхода из профиля
     @objc
     private func didTapLogoutButton(){
         
