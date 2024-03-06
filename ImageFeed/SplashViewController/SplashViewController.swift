@@ -74,7 +74,7 @@ final class SplashViewController: UIViewController {
 //MARK: AuthDelegate
 
 extension SplashViewController: AuthViewControllerDelegate {
-    func authViewController(_ vc: AuthViewController, didAAuthViewController code: String) {
+    func authViewController(_ vc: AuthViewController, didAuthViewController code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.fetchOAuthToken(with: code)
