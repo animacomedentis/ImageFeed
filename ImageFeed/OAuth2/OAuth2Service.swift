@@ -3,6 +3,10 @@ import Foundation
 fileprivate let AccessTokenURL = "https://unsplash.com/oauth/token"
 
 final class OAuth2Service {
+    static let shared = OAuth2Service()
+    
+    private let dataStorage = OAuth2TokenStorage()
+    private let urlSession = URLSession.shared
     
     enum NetworkError: Error {
         case httpStatusCode(Int)
@@ -10,7 +14,7 @@ final class OAuth2Service {
         case urlSessionError(Error)
     }
     
-    func fetchAuthToken (code: String, completion: @escaping (Result<String, Error>) -> Void){
+    func fetchOAuthToken (code: String, completion: @escaping (Result<String, Error>) -> Void){
         
         guard var urlComponents = URLComponents(string: AccessTokenURL) else {
             return assertionFailure("Failed to make urlComponents from \(AccessTokenURL)")

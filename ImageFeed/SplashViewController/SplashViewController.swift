@@ -74,6 +74,12 @@ final class SplashViewController: UIViewController {
 //MARK: AuthDelegate
 
 extension SplashViewController: AuthViewControllerDelegate {
+    func didAuthenticate(_ vc: AuthViewController) {
+        vc.dismiss(animated: true)
+        
+        switchToTabBarViewController()
+    }
+    
     func authViewController(_ vc: AuthViewController, didAAuthViewController code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
@@ -82,7 +88,7 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     
     private func fetchOAuthToken(with code: String){
-        networkServices.fetchAuthToken(code: code) {[weak self] result in
+        networkServices.fetchOAuthToken(code: code) {[weak self] result in
             guard let self = self else{return}
             switch result {
             case .success(let token):
