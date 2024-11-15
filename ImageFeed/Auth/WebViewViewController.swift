@@ -58,10 +58,10 @@ final class WebViewViewController: UIViewController{
             fatalError("Failed to make urlComponents")
         }
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constant.AccessKey),
-            URLQueryItem(name: "redirect_uri", value: Constant.RedirectURI),
+            URLQueryItem(name: "client_id", value: Constant.accessKey),
+            URLQueryItem(name: "redirect_uri", value: Constant.redirectURI),
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constant.AccessScope)
+            URLQueryItem(name: "scope", value: Constant.accessScope)
         ]
         if let url = urlComponents.url{
             let request = URLRequest(url: url)

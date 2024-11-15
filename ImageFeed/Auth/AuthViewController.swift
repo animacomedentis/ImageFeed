@@ -78,7 +78,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
             case .success:
                 self.delegate?.didAuthenticate(self)
             case .failure:
-                //TODO: обработка ошибки
+                assertionFailure("Error receiving token")
                 break
             }
         }
