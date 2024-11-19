@@ -2,7 +2,6 @@ import Foundation
 
 
 final class ProfileService {
-    
     static let shared = ProfileService()
     
     private let builder: URLRequestBilder
@@ -11,7 +10,6 @@ final class ProfileService {
     
     init(builder: URLRequestBilder = .shared) {
         self.builder = builder
-        
     }
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
@@ -25,7 +23,8 @@ final class ProfileService {
             return
         }
         
-        currentTask = fetch(request: request) { [weak self] response in
+        let session = URLSession.shared
+        currentTask = session.objectTask(for: request) { [weak self] (response: Result<ProfileResult, Error>) in
             
             self?.currentTask = nil
             
@@ -36,12 +35,8 @@ final class ProfileService {
             case .failure(let error):
                 completion(.failure(error))
             }
-            
         }
     }
-    
-    
-    
 }
 
 extension ProfileService {
@@ -50,37 +45,5 @@ extension ProfileService {
                                httpMethod: "GET",
                                baseURLString: Constant.defaultBaseURLString
         )
-    }
-
-    func fetch(request: URLRequest, complition: @escaping
-    (Result<ProfileResult, Error>) -> Void) -> URLSessionTask {
-        let fulfillComplitionOnMainThread: (Result<ProfileResult, Error>) -> Void = {
-            result in
-            DispatchQueue.main.async {
-                complition(result)
-            }
-        }
-        let session = URLSession.shared
-        let task = session.dataTask(with: request, completionHandler: { data, response, error in
-            if let data = data, let response = response, let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if 200 ..< 300 ~= statusCode {
-                    do {
-                        let decoder = JSONDecoder()
-                        let result = try decoder.decode(ProfileResult.self, from: data)
-                        fulfillComplitionOnMainThread(.success(result))
-                    } catch {
-                        fulfillComplitionOnMainThread(.failure(NetworkError.decodingError(error)))
-                    }
-                } else {
-                    fulfillComplitionOnMainThread(.failure(NetworkError.invalidRequest))
-                }
-            } else if let error = error {
-                fulfillComplitionOnMainThread(.failure(NetworkError.decodingError(error)))
-            } else {
-                fulfillComplitionOnMainThread(.failure(NetworkError.invalidRequest))
-            }
-        })
-        task.resume()
-        return task
     }
 }

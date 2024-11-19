@@ -5,7 +5,7 @@ fileprivate let AccessTokenURL = "https://unsplash.com/oauth/token"
 final class OAuth2Service {
     static let shared = OAuth2Service()
     
-    private let storage: OAuth2TokenStorage
+    private var storage: OAuth2TokenStorage
     private let builder: URLRequestBilder
     private let urlSession: URLSession
     private var currentTask: URLSessionTask?
@@ -22,76 +22,39 @@ final class OAuth2Service {
     }
     
     func fetchOAuthToken (code: String, completion: @escaping (Result<String, Error>) -> Void){
-        assert(Thread.isMainThread)
-        if currentTask != nil {
-            if lastCode != code {
-                currentTask?.cancel()
-            } else {
-                completion(.failure(NetworkError.invalidRequest))
-                return
-            }
-        } else {
-            if lastCode == code {
-                completion(.failure(NetworkError.invalidRequest))
-            }
-        }
+        guard code != lastCode, currentTask != nil else { return }
         
         lastCode = code
         
         guard
-            let request = makeOAuthTokenRequest(code: code)
+            let request = authTokenRequest(code: code)
         else {
+            assertionFailure("Invalid Request")
             completion(.failure(NetworkError.invalidRequest))
             return
         }
         
-        let task = urlSession.dataTask(with: request) { data,response,error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    DispatchQueue.main.async {
-                        completion(.failure(NetworkError.urlSessionError(error)))
-                    }
-                    return
-                }
-                
-                if let response = response as? HTTPURLResponse {
-                    if response.statusCode < 200 || response.statusCode >= 300 {
-                        DispatchQueue.main.async {
-                            completion(.failure(NetworkError.httpStatusCode(response.statusCode)))
-                        }
-                        return
-                    }
-                }
-                
-                if let data = data {
-                    
-                    do {
-                        let decoder = JSONDecoder()
-                        decoder.keyDecodingStrategy = .convertFromSnakeCase
-                        let responseBody = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                        DispatchQueue.main.async {
-                            //MARK: accessToken
-                            print(responseBody.accessToken)
-                            completion(.success(responseBody.accessToken))
-                        }
-                    } catch {
-                        assertionFailure("Decode error \(error)")
-                    }
-                }
-                self.currentTask = nil
-                self.lastCode = nil
+        let session = URLSession.shared
+        currentTask = session.objectTask(for: request) { [weak self] (response: Result<OAuthTokenResponseBody, Error>) in
+            
+            self?.currentTask = nil
+            
+            switch response {
+            case .success(let body):
+                let authToken = body.accessToken
+                self?.storage.token = authToken
+                completion(.success(authToken))
+            case .failure(let error):
+                completion(.failure(error))
             }
+            
         }
-        self.currentTask = task
-        task.resume()
     }
 }
 
-
-
 extension OAuth2Service {
     
-    private func makeOAuthTokenRequest(code: String) -> URLRequest? {
+    private func authTokenRequest(code: String) -> URLRequest? {
         builder.makeHTTPRequst(
             path: "\(Constant.baseAuthTokenPath)"
             + "?client_id=\(Constant.accessKey)"
@@ -102,7 +65,5 @@ extension OAuth2Service {
             httpMethod: "POST",
             baseURLString: Constant.defaultBaseURLString
         )
-        
-        
     }
 }
