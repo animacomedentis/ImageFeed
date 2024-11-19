@@ -2,30 +2,37 @@ import Foundation
 
 fileprivate let AccessTokenURL = "https://unsplash.com/oauth/token"
 
-enum AuthServiceError: Error {
-    case invalidRequest
-}
-
 final class OAuth2Service {
-    
     static let shared = OAuth2Service()
-    private let dataStorage = OAuth2TokenStorage()
-    private let urlSession = URLSession.shared
-    private var task: URLSessionTask?
+    
+    private let storage: OAuth2TokenStorage
+    private let builder: URLRequestBilder
+    private let urlSession: URLSession
+    private var currentTask: URLSessionTask?
     private var lastCode: String?
+    
+    init(
+        builder: URLRequestBilder = .shared,
+        urlSession: URLSession = .shared,
+        storage: OAuth2TokenStorage = .shared
+    ) {
+        self.builder = builder
+        self.urlSession = urlSession
+        self.storage = storage
+    }
     
     func fetchOAuthToken (code: String, completion: @escaping (Result<String, Error>) -> Void){
         assert(Thread.isMainThread)
-        if task != nil {
+        if currentTask != nil {
             if lastCode != code {
-                task?.cancel()
+                currentTask?.cancel()
             } else {
-                completion(.failure(AuthServiceError.invalidRequest))
+                completion(.failure(NetworkError.invalidRequest))
                 return
             }
         } else {
             if lastCode == code {
-                completion(.failure(AuthServiceError.invalidRequest))
+                completion(.failure(NetworkError.invalidRequest))
             }
         }
         
@@ -34,7 +41,7 @@ final class OAuth2Service {
         guard
             let request = makeOAuthTokenRequest(code: code)
         else {
-            completion(.failure(AuthServiceError.invalidRequest))
+            completion(.failure(NetworkError.invalidRequest))
             return
         }
         
@@ -71,41 +78,31 @@ final class OAuth2Service {
                         assertionFailure("Decode error \(error)")
                     }
                 }
-                self.task = nil
+                self.currentTask = nil
                 self.lastCode = nil
             }
         }
-        self.task = task
+        self.currentTask = task
         task.resume()
     }
 }
 
-extension OAuth2Service {
-    enum NetworkError: Error {
-        case httpStatusCode(Int)
-        case urlRequestError(Error)
-        case urlSessionError(Error)
-    }
-}
+
 
 extension OAuth2Service {
     
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
-        let baseURL = URL(string: "https://unsplash.com")
-        guard let url = URL(
-            string: "/oauth/token"
+        builder.makeHTTPRequst(
+            path: "\(Constant.baseAuthTokenPath)"
             + "?client_id=\(Constant.accessKey)"
             + "&&client_secret=\(Constant.secretKey)"
             + "&&redirect_uri=\(Constant.redirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
-            relativeTo: baseURL
-        ) else {
-            assertionFailure("Failed to create URL")
-            return nil
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        return request
+            httpMethod: "POST",
+            baseURLString: Constant.defaultBaseURLString
+        )
+        
+        
     }
 }

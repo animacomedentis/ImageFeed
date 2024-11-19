@@ -1,6 +1,7 @@
 import UIKit
 
 final class SplashViewController: UIViewController {
+    
     //MARK: properties
     private var networkServices = OAuth2Service()
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
@@ -15,7 +16,7 @@ final class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if let _ = OAuth2TokenStorage.token {
+        if let _ = OAuth2TokenStorage.shared.token {
             switchToTabBarViewController()
         }else {
             performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
@@ -92,7 +93,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else{return}
             switch result {
             case .success(let token):
-                OAuth2TokenStorage.token = token
+                OAuth2TokenStorage.shared.token = token
                 self.switchToTabBarViewController()
             case .failure(let error):
                 print(error)
