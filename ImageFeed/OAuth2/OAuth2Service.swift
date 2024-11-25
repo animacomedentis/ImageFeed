@@ -21,8 +21,12 @@ final class OAuth2Service {
         self.storage = storage
     }
     
+    var isAuth: Bool {
+        storage.token != nil
+    }
+    
     func fetchOAuthToken (code: String, completion: @escaping (Result<String, Error>) -> Void){
-        guard code != lastCode, currentTask != nil else { return }
+        guard code != lastCode   else { return }
         
         lastCode = code
         
@@ -36,18 +40,17 @@ final class OAuth2Service {
         
         let session = URLSession.shared
         currentTask = session.objectTask(for: request) { [weak self] (response: Result<OAuthTokenResponseBody, Error>) in
-            
-            self?.currentTask = nil
+            guard let self else { return }
             
             switch response {
             case .success(let body):
                 let authToken = body.accessToken
-                self?.storage.token = authToken
+                storage.token = authToken
                 completion(.success(authToken))
             case .failure(let error):
                 completion(.failure(error))
             }
-            
+            currentTask = nil
         }
     }
 }

@@ -12,11 +12,11 @@ final class ProfileService {
         self.builder = builder
     }
     
-    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+    func fetchProfile(completion: @escaping (Result<Profile, Error>) -> Void) {
         currentTask?.cancel()
         
         guard
-            let request = makeFetchProfileRequest(token: token)
+            let request = makeFetchProfileRequest()
         else {
             assertionFailure("Invalid Request")
             completion(.failure(NetworkError.invalidRequest))
@@ -40,7 +40,7 @@ final class ProfileService {
 }
 
 extension ProfileService {
-    func makeFetchProfileRequest (token: String) -> URLRequest? {
+    func makeFetchProfileRequest () -> URLRequest? {
         builder.makeHTTPRequst(path: "/me",
                                httpMethod: "GET",
                                baseURLString: Constant.defaultBaseURLString

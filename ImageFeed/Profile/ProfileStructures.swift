@@ -15,14 +15,14 @@ struct ProfileResult: Codable {
         case profileImage = "profile_image"
     }
  
-    init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.userLogin = try container.decode(String.self, forKey: .userLogin)
-        self.firstName = try container.decodeIfPresent(String.self, forKey: .firstName)
-        self.lastName = try container.decodeIfPresent(String.self, forKey: .lastName)
-        self.bio = try container.decodeIfPresent(String.self, forKey: .bio)
-        self.profileImage = try container.decodeIfPresent(ProfileImage.self, forKey: .profileImage)
-    }
+//    init(from decoder: any Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+//        self.userLogin = try container.decode(String.self, forKey: .userLogin)
+//        self.firstName = try container.decodeIfPresent(String.self, forKey: .firstName)
+//        self.lastName = try container.decodeIfPresent(String.self, forKey: .lastName)
+//        self.bio = try container.decodeIfPresent(String.self, forKey: .bio)
+//        self.profileImage = try container.decodeIfPresent(ProfileImage.self, forKey: .profileImage)
+//    }
 }
 
 struct ProfileImage: Codable {

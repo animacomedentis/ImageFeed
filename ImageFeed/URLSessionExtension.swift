@@ -1,18 +1,19 @@
 import Foundation
 
 extension URLSession {
-    func objectTask<T: Decodable>(for request: URLRequest, complition: @escaping (Result<T, Error>) -> Void) -> URLSessionDataTask {
+    func objectTask<T: Decodable>(for request: URLRequest, completion: @escaping (Result<T, Error>) -> Void) -> URLSessionDataTask {
         
         let fulfillComplitionOnMainThread: (Result<T, Error>) -> Void = {
             result in
             DispatchQueue.main.async {
-                complition(result)
+                completion(result)
             }
         }
         
         let session = URLSession.shared
         let task = session.dataTask(with: request, completionHandler: { data, response, error in
             if let data = data, let response = response, let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                print(statusCode)
                 if 200 ..< 300 ~= statusCode {
                     do {
                         let decoder = JSONDecoder()
