@@ -87,6 +87,7 @@
 		7543451B2B84D59300F662D7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				75FAC7132CEB51800065BE58 /* ProfileStructures.swift */,
 				7543451C2B84D5C400F662D7 /* OAuthTokenBody.swift */,
 			);
 			path = Models;
@@ -95,6 +96,7 @@
 		7543451E2B84E97500F662D7 /* SplashViewController */ = {
 			isa = PBXGroup;
 			children = (
+				75FAC70F2CE796D30065BE58 /* UIBlockingProgressHUD.swift */,
 				7543451F2B84E99D00F662D7 /* SplashViewController.swift */,
 			);
 			path = SplashViewController;
@@ -111,7 +113,6 @@
 		759F37CE2B7A56740000B528 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				75FAC70F2CE796D30065BE58 /* UIBlockingProgressHUD.swift */,
 				759F37CC2B7A45E70000B528 /* AuthViewController.swift */,
 				759F37CF2B7A579C0000B528 /* WebViewViewController.swift */,
 			);
@@ -121,8 +122,6 @@
 		75B49AB72B500C640036BC78 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				75FAC7132CEB51800065BE58 /* ProfileStructures.swift */,
-				75FAC7112CEB4D7D0065BE58 /* ProfileService.swift */,
 				75B49AB82B500CB60036BC78 /* ProfileViewController.swift */,
 			);
 			path = Profile;
@@ -134,6 +133,42 @@
 				75CFD7002CEF8D9800BAF8CF /* AlertPresenter.swift */,
 			);
 			path = Alerts;
+			sourceTree = "<group>";
+		};
+		75F2732A2CF5E0D600E0E0BE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				754345162B84CF3500F662D7 /* OAuth2 */,
+				75FAC7112CEB4D7D0065BE58 /* ProfileService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		75F2732B2CF5E1A300E0E0BE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				759F37C52B7516D70000B528 /* Constant.swift */,
+				75FAC7172CEB98A20065BE58 /* Error.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		75F2732C2CF5E20B00E0E0BE /* URL */ = {
+			isa = PBXGroup;
+			children = (
+				75FAC7152CEB76540065BE58 /* URLRequest+Extension.swift */,
+				75CFD6FD2CECDD4700BAF8CF /* URLSessionExtension.swift */,
+			);
+			path = URL;
+			sourceTree = "<group>";
+		};
+		75F2732D2CF5E25D00E0E0BE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D5F40A4C2B1F31990047F1AC /* Assets.xcassets */,
+				D5F40A4E2B1F31990047F1AC /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		D5BB222C2B20CDDD0092A8CA /* ImagesList */ = {
@@ -164,24 +199,21 @@
 		D5F40A422B1F31980047F1AC /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
-				75CFD6FF2CEF8D8400BAF8CF /* Alerts */,
-				75CFD6FD2CECDD4700BAF8CF /* URLSessionExtension.swift */,
-				75FAC7172CEB98A20065BE58 /* Error.swift */,
-				75FAC7152CEB76540065BE58 /* URLRequest+Extension.swift */,
 				D5F40A432B1F31980047F1AC /* AppDelegate.swift */,
 				D5F40A452B1F31980047F1AC /* SceneDelegate.swift */,
-				759F37C52B7516D70000B528 /* Constant.swift */,
-				7543451E2B84E97500F662D7 /* SplashViewController */,
-				759F37CE2B7A56740000B528 /* Auth */,
-				754345162B84CF3500F662D7 /* OAuth2 */,
-				7543451B2B84D59300F662D7 /* Models */,
-				D5BB222C2B20CDDD0092A8CA /* ImagesList */,
-				7584576D2B517490006EF9E1 /* SingleImageView */,
-				75B49AB72B500C640036BC78 /* Profile */,
-				D5F40A4C2B1F31990047F1AC /* Assets.xcassets */,
 				751E2E792B2C9217007A9A64 /* Main.storyboard */,
-				D5F40A4E2B1F31990047F1AC /* LaunchScreen.storyboard */,
 				D5F40A512B1F31990047F1AC /* Info.plist */,
+				75CFD6FF2CEF8D8400BAF8CF /* Alerts */,
+				759F37CE2B7A56740000B528 /* Auth */,
+				75F2732B2CF5E1A300E0E0BE /* Helpers */,
+				D5BB222C2B20CDDD0092A8CA /* ImagesList */,
+				7543451B2B84D59300F662D7 /* Models */,
+				75B49AB72B500C640036BC78 /* Profile */,
+				75F2732D2CF5E25D00E0E0BE /* Resources */,
+				75F2732A2CF5E0D600E0E0BE /* Services */,
+				7584576D2B517490006EF9E1 /* SingleImageView */,
+				7543451E2B84E97500F662D7 /* SplashViewController */,
+				75F2732C2CF5E20B00E0E0BE /* URL */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
