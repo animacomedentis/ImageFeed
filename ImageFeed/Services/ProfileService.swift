@@ -22,15 +22,19 @@ final class ProfileService {
             completion(.failure(NetworkError.invalidRequest))
             return
         }
-        
         let session = URLSession.shared
         currentTask = session.objectTask(for: request) { [weak self] (response: Result<ProfileResult, Error>) in
+            guard let self = self else { return }
             
-            self?.currentTask = nil
+            self.currentTask = nil
             
             switch response {
-            case .success(let profileResult):
-                let profile = Profile(result: profileResult)
+            case .success(let json):
+                let profile = Profile(username: json.userName,
+                                      name: "\(json.firstName) \(json.lastName)",
+                                      loginName: "@\(json.userName)",
+                                      bio: json.bio)
+                self.profile = profile
                 completion(.success(profile))
             case .failure(let error):
                 completion(.failure(error))

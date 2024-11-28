@@ -5,5 +5,5 @@ enum NetworkError: Error {
     case urlRequestError(Error)
     case urlSessionError(Error)
     case invalidRequest
-    case decodingError(Error)
+    case decodingError
 }

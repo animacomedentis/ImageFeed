@@ -15,15 +15,15 @@ final class URLRequestBilder {
            let url = URL(string: baseURLString),
            let baseUrl = URL(string: path, relativeTo: url)
        else { return nil }
-       
-       var requst = URLRequest(url: baseUrl)
-       requst.httpMethod = httpMethod
-       
+        
+       var request = URLRequest(url: baseUrl)
+       request.httpMethod = httpMethod
        
         if let token = storage.token {
-           requst.setValue("Bearer \(token)", forHTTPHeaderField: "Autorization")
+           request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
        }
-       return requst
+        
+       return request
    }
 
 }

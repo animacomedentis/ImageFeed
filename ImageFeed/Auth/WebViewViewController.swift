@@ -13,7 +13,6 @@ final class WebViewViewController: UIViewController{
     @IBOutlet private weak var webView: WKWebView!
     @IBOutlet private weak var progress: UIProgressView!
     weak var delegate: WebViewViewControllerDelegate?
-    
     //MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +22,23 @@ final class WebViewViewController: UIViewController{
         makeRequest()
         
     }
+    //MARK: viewDidAppear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        webView.addObserver(
+            self,
+            forKeyPath: #keyPath(WKWebView.estimatedProgress),
+            options: .new,
+            context: nil)
+        updateProgress()
+    }
+    
+    //MARK: viewWillDisappear
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
+    }
+
     
     //MARK: viewsetup
     private func webViewSetup() {
@@ -75,23 +91,7 @@ final class WebViewViewController: UIViewController{
     private func didTapBackButtonWebView(){
         delegate?.webViewViewControllerDidCancel(self)
     }
-    //MARK: viewDidAppear
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
-        updateProgress()
-    }
-    
-    //MARK: viewWillDisappear
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
-    }
-    
+  
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(WKWebView.estimatedProgress) {
             updateProgress()
@@ -104,7 +104,6 @@ final class WebViewViewController: UIViewController{
         progress.progress = Float(webView.estimatedProgress)
         progress.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
-    
     
 }
 
