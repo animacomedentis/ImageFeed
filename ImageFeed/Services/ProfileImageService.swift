@@ -8,7 +8,6 @@ final class ProfileImageService {
     private(set) var avatarURL: String?
     private let urlBilder = URLRequestBilder.shared
     
-    
     func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         
@@ -46,6 +45,5 @@ final class ProfileImageService {
         urlBilder.makeHTTPRequst(path: "/users/\(username)",
                                  httpMethod: "GET",
                                  baseURLString: Constant.defaultBaseURLString)
-       
     }
 }

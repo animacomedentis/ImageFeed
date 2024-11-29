@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		751E2E7B2B2C9217007A9A64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 751E2E792B2C9217007A9A64 /* Main.storyboard */; };
+		7529B6502CF8E1AB003B4502 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 7529B64F2CF8E1AB003B4502 /* SwiftKeychainWrapper */; };
 		754345182B84CF7100F662D7 /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754345172B84CF7100F662D7 /* OAuth2Service.swift */; };
 		7543451A2B84CF9100F662D7 /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754345192B84CF9100F662D7 /* OAuth2TokenStorage.swift */; };
 		7543451D2B84D5C400F662D7 /* OAuthTokenBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7543451C2B84D5C400F662D7 /* OAuthTokenBody.swift */; };
@@ -72,6 +73,7 @@
 			files = (
 				75F273322CF5EDFA00E0E0BE /* Kingfisher in Frameworks */,
 				75FAC7032CE617F00065BE58 /* ProgressHUD in Frameworks */,
+				7529B6502CF8E1AB003B4502 /* SwiftKeychainWrapper in Frameworks */,
 				75FAC7062CE61B570065BE58 /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,6 +272,7 @@
 			packageReferences = (
 				75FAC7042CE61B570065BE58 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
 				75F273302CF5EDFA00E0E0BE /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				7529B64E2CF8E1AB003B4502 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 			);
 			productRefGroup = D5F40A412B1F31980047F1AC /* Products */;
 			projectDirPath = "";
@@ -549,6 +552,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7529B64E2CF8E1AB003B4502 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
 		75F273302CF5EDFA00E0E0BE /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -576,6 +587,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7529B64F2CF8E1AB003B4502 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7529B64E2CF8E1AB003B4502 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
 		75F273312CF5EDFA00E0E0BE /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 75F273302CF5EDFA00E0E0BE /* XCRemoteSwiftPackageReference "Kingfisher" */;

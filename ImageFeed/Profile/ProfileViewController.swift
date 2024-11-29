@@ -7,6 +7,7 @@ final class ProfileViewController:UIViewController {
     private var alertPresenter = AlertPresenter()
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let profileService = ProfileService.shared
+    private var storage = OAuth2TokenStorage.shared
     private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     
@@ -147,8 +148,10 @@ final class ProfileViewController:UIViewController {
         
     }
     
-    
-    //TODO: функционал кнопки выхода из профиля
+    private func switchAuthCotroller () {
+      performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: self)
+    }
+   
     @objc
     private func didTapLogoutButton(){
        

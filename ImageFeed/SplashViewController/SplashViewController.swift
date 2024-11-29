@@ -4,7 +4,7 @@ final class SplashViewController: UIViewController {
     
     //MARK: properties
     private var networkServices = OAuth2Service()
-    private let storage = OAuth2TokenStorage()
+    private var storage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
@@ -50,31 +50,6 @@ final class SplashViewController: UIViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
    
-//    func authViewController(_ vc: AuthViewController, didAAuthViewController code: String) {
-//        dismiss(animated: true) { [weak self] in
-//            guard let self = self else { return }
-//            self.fetchOAuthToken(code: code)
-//        }
-//    }
-//    
-//    private func fetchOAuthToken(code: String){
-//        UIBlockingProgressHUD.show()
-//        
-//        networkServices.fetchOAuthToken(code: code) { [weak self] authResult in
-//            guard let self = self else{ return }
-//            
-//            switch authResult {
-//            case .success(_):
-//                fetchProfile(complition: {
-//                    UIBlockingProgressHUD.dismiss()
-//                })
-//            case .failure(let error):
-//                showLoginAlert(error: error)
-//                UIBlockingProgressHUD.dismiss()
-//            }
-//        }
-//    }
-    
     private func fetchProfile(complition: @escaping () -> Void) {
         profileService.fetchProfile { [weak self] profileResult in
             guard let self = self else { return }
@@ -131,7 +106,7 @@ extension SplashViewController {
         performSegue(withIdentifier: showImagesListIdentifier, sender: self)
     }
     
-    private func showAuthCotroller () {
+    private func switchAuthCotroller () {
       performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: self)
     }
     
@@ -146,7 +121,7 @@ extension SplashViewController {
                 self?.switchToTabBarViewController()
             }
         } else {
-            showAuthCotroller()
+            switchAuthCotroller()
         }
     }
 }
