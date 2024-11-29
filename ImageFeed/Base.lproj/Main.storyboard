@@ -189,7 +189,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hat-DG-skt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1828.985507246377" y="464.73214285714283"/>
+            <point key="canvasLocation" x="2045" y="570"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="JQi-nA-pXT">
@@ -248,13 +248,14 @@
         <!--Splash View Controller-->
         <scene sceneID="oMc-HC-ryG">
             <objects>
-                <viewController id="ula-5g-56V" customClass="SplashViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SplashViewController" id="ula-5g-56V" customClass="SplashViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="q6N-jN-jrw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="G0A-T6-Lve"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="5Iv-wz-mQ4"/>
                     <connections>
                         <segue destination="50n-3b-Wq2" kind="presentation" identifier="ShowAuthenticationScreen" modalPresentationStyle="fullScreen" id="UGq-mL-FNg"/>
                         <segue destination="2iM-qe-nrm" kind="presentation" identifier="ShowImagesList" modalPresentationStyle="fullScreen" id="vjL-Ns-5lv"/>

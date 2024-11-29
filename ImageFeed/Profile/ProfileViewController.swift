@@ -5,7 +5,6 @@ final class ProfileViewController:UIViewController {
     
     
     private var alertPresenter = AlertPresenter()
-    private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let profileService = ProfileService.shared
     private var storage = OAuth2TokenStorage.shared
     private let profileImageService = ProfileImageService.shared
@@ -88,16 +87,26 @@ final class ProfileViewController:UIViewController {
         
         return label
     }()
-    private var logoutButton: UIButton = {
-        let button = UIButton.systemButton(
-            with: UIImage(named: "logout_button")!,
-            target: ProfileViewController.self,
-            action: #selector(Self.didTapLogoutButton))
+    private lazy var logoutButton: UIButton = {
+//        let button = UIButton.systemButton(
+//            with: UIImage(named: "logout_button")!,
+//            target: ProfileViewController.self,
+//            action: #selector(Self.didTapLogoutButton))
+//        button.tintColor = .ypRed
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        return button
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "logout_button"), for: .normal)
         button.tintColor = .ypRed
+        button.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+    @objc
+    private func didTapLogoutButton(){
+        print("logout")
+    }
+   
     //MARK: -setup View + Constraints
     
     private func setupView() {
@@ -147,14 +156,4 @@ final class ProfileViewController:UIViewController {
                                     + logoutButtonConstraints)
         
     }
-    
-    private func switchAuthCotroller () {
-      performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: self)
-    }
-   
-    @objc
-    private func didTapLogoutButton(){
-       
-   }
-    
 }
