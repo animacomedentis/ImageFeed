@@ -25,8 +25,8 @@ final class OAuth2Service {
         storage.token != nil
     }
     
-    func fetchOAuthToken (code: String, completion: @escaping (Result<String, Error>) -> Void){
-        guard code != lastCode   else { return }
+    func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void){
+        guard code != lastCode else { return }
         
         lastCode = code
         

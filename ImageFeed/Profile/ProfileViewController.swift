@@ -4,7 +4,7 @@ import Kingfisher
 final class ProfileViewController:UIViewController {
     
     
-    private var alertPresenter = AlertPresenter()
+    private let alertPresenter = AlertPresenter()
     private let profileService = ProfileService.shared
     private var storage = OAuth2TokenStorage.shared
     private let profileImageService = ProfileImageService.shared
@@ -70,6 +70,7 @@ final class ProfileViewController:UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     private var userName: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
@@ -78,6 +79,7 @@ final class ProfileViewController:UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     private var bio: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
@@ -87,14 +89,9 @@ final class ProfileViewController:UIViewController {
         
         return label
     }()
+    
     private lazy var logoutButton: UIButton = {
-//        let button = UIButton.systemButton(
-//            with: UIImage(named: "logout_button")!,
-//            target: ProfileViewController.self,
-//            action: #selector(Self.didTapLogoutButton))
-//        button.tintColor = .ypRed
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        return button
+
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "logout_button"), for: .normal)
         button.tintColor = .ypRed
@@ -102,13 +99,13 @@ final class ProfileViewController:UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
     @objc
     private func didTapLogoutButton(){
         print("logout")
     }
    
     //MARK: -setup View + Constraints
-    
     private func setupView() {
         view.addSubview(avatarImage)
         view.addSubview(fullName)
@@ -154,6 +151,5 @@ final class ProfileViewController:UIViewController {
                                     + userNameConstraints
                                     + bioConstraints
                                     + logoutButtonConstraints)
-        
     }
 }
