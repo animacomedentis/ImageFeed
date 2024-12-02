@@ -1,11 +1,16 @@
 import UIKit
 
+
 protocol AuthViewControllerDelegate: AnyObject {
-    func authViewController(_ vc: AuthViewController, didAAuthViewController code: String)
+    func didAuthenticate(_ vc: AuthViewController)
+    
 }
 
 final class AuthViewController: UIViewController{
+    
+   
     private let ShowWebViewSegueIdentifier = "ShowWebView"
+    private let oauth2Service = OAuth2Service.shared
     
     weak var delegate: AuthViewControllerDelegate?
     
@@ -65,11 +70,31 @@ final class AuthViewController: UIViewController{
     }
 }
 extension AuthViewController: WebViewViewControllerDelegate {
+    
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        delegate?.authViewController(self, didAAuthViewController: code)
+       vc.dismiss(animated: true)
+        fetchOAuthToken(code) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success:
+                self.delegate?.didAuthenticate(self)
+            case .failure:
+                assertionFailure("Error receiving token")
+                break
+            }
+        }
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
+    }
+}
+
+extension AuthViewController {
+    private func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        oauth2Service.fetchOAuthToken(code: code) { result in
+            completion(result)
+        }
     }
 }
