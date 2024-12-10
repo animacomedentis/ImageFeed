@@ -1,13 +1,9 @@
 import UIKit
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
-    var image: UIImage! {
-        didSet {
-            guard isViewLoaded else { return }
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
-        }
-    }
+    
+    var imageURL: URL?
     
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private var imageView: UIImageView!
@@ -15,8 +11,11 @@ final class SingleImageViewController: UIViewController {
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }
-    @IBAction private func didTapShareButton() {
-        let share = UIActivityViewController(activityItems: [image ?? print("error alert")], applicationActivities: nil)
+    @IBAction private func didTapShareButton(_ sender: UIButton) {
+        guard let image = imageView.image else { return }
+        let share = UIActivityViewController(activityItems: [image],
+                                             applicationActivities: nil
+        )
         present(share, animated: true, completion: nil)
     }
     
@@ -24,9 +23,42 @@ final class SingleImageViewController: UIViewController {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        imageView.image = image
         
-        rescaleAndCenterImageInScrollView(image: image)
+    }
+    
+    
+    private func setupPhoto() {
+        guard let imageURL = imageURL else {
+            print("imageURL is nil")
+            return
+        }
+        UIBlockingProgressHUD.show()
+        let processor = DownsamplingImageProcessor(size: imageView.frame.size)
+        imageView.kf.setImage(with: imageURL,
+                              options: [.processor(processor)]
+        ) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.showErrorAlert()
+            }
+        }
+    }
+    
+    private func showErrorAlert() {
+        let alert = UIAlertController(title: "Что-то пошло не так",
+                                      message: "Попробовать еще раз?",
+                                      preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Повторить", style: .default){ action in
+            self.setupPhoto()
+        })
+        alert.addAction(UIAlertAction(title: "Не надо", style: .default))
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {

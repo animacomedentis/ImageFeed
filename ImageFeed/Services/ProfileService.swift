@@ -47,7 +47,7 @@ extension ProfileService {
     func makeFetchProfileRequest () -> URLRequest? {
         builder.makeHTTPRequst(path: "/me",
                                httpMethod: "GET",
-                               baseURLString: Constant.defaultBaseURLString
+                               baseURLString: Constant.baseURLString
         )
     }
 }
