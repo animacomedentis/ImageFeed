@@ -104,11 +104,11 @@ extension ImagesListViewController {
     func imagesListCellDidLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let photo = photos[indexPath.row]
-        //UIBlockingProgressHUD.show()
+        UIBlockingProgressHUD.show()
         imageListService.changeLike(photoID: photo.id, isLike: !photo.isLiked) { [weak self] result in
             guard let self = self else { return }
             
-          //  UIBlockingProgressHUD.dismiss()
+            UIBlockingProgressHUD.dismiss()
             switch result {
             case .success:
                 self.photos = self.imageListService.photos

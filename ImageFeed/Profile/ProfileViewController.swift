@@ -7,6 +7,7 @@ final class ProfileViewController:UIViewController {
     private let alertPresenter = AlertPresenter()
     private let profileService = ProfileService.shared
     private var storage = OAuth2TokenStorage.shared
+    private let logoutService = LogoutService.shared
     private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     
@@ -102,9 +103,27 @@ final class ProfileViewController:UIViewController {
     
     @objc
     private func didTapLogoutButton(){
-        print("logout")
+        self.logoutAlert()
     }
    
+    private func logoutAlert() {
+        let alert = UIAlertController(title: "Пока, пока!",
+                                      message: "Уверены что хотите выйти?",
+                                      preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .default))
+        alert.addAction(UIAlertAction(title: "Да", style: .default){ action in
+            self.logoutService.logout()
+            guard let window = UIApplication.shared.windows.first else { return }
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: .main),
+                vc = storyboard.instantiateViewController(identifier: "SplashViewController")
+            
+            window.rootViewController = vc
+        })
+        present(alert, animated: true)
+    }
     //MARK: -setup View + Constraints
     private func setupView() {
         view.addSubview(avatarImage)

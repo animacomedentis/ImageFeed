@@ -7,6 +7,7 @@ final class ProfileService {
     private let builder: URLRequestBilder
     private(set) var profile: Profile?
     private var currentTask: URLSessionTask?
+    private var task: URLSessionTask?
     
     init(builder: URLRequestBilder = .shared) {
         self.builder = builder
@@ -52,3 +53,9 @@ extension ProfileService {
     }
 }
 
+extension ProfileService {
+    func cleanSession() {
+        profile = nil
+        task = nil
+    }
+}

@@ -47,3 +47,10 @@ final class ProfileImageService {
                                  baseURLString: Constant.baseURLString)
     }
 }
+
+extension ProfileImageService {
+    func cleanSession() {
+        currentTask = nil
+        avatarURL = nil
+    }
+}

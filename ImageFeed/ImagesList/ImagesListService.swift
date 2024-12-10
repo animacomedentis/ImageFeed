@@ -101,3 +101,11 @@ final class ImagesListService {
     }
     
 }
+
+extension ImagesListService {
+    func cleanSession() {
+        lastLoadedPage = nil
+        photos = []
+        task = nil
+    }
+}
