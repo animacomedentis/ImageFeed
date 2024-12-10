@@ -69,6 +69,7 @@ final class ImagesListService {
                         )
                         self.photos[index] = newPhoto
                     }
+                    comletion(.success(()))
                 case .failure(let error):
                     comletion(.failure(error))
                 }
@@ -84,7 +85,7 @@ final class ImagesListService {
     
     private func likeRequest(photoID: String, isLike: Bool) -> URLRequest?{
         bilder.makeHTTPRequst(path: "/photos/\(photoID)/like",
-                              httpMethod: isLike ? "POST" : "DELETE" ,
+                              httpMethod: isLike ? "POST" : "DELETE",
                               baseURLString: Constant.baseURLString)
         
     }

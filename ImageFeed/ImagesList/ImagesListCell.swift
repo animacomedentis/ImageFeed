@@ -18,14 +18,14 @@ final class ImagesListCell: UITableViewCell {
         cellImage.kf.cancelDownloadTask()
     }
     
-    @IBAction private func likeButtonClicked() {
+    @IBAction func likeButtonClicked(_ sender: Any) {
         delegate?.imagesListCellDidLike(self)
     }
     
     func setIsLiked(_ isLiked: Bool) {
         let image = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         DispatchQueue.main.async { [weak self] in
-            guard let self else {return}
+            guard let self else { return }
             self.likeButton.setImage(image, for: .normal)
         }
     }
