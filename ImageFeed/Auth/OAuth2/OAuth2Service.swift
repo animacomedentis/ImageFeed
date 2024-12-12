@@ -25,8 +25,8 @@ final class OAuth2Service {
         storage.token != nil
     }
     
-    func fetchOAuthToken (code: String, completion: @escaping (Result<String, Error>) -> Void){
-        guard code != lastCode   else { return }
+    func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void){
+        guard code != lastCode else { return }
         
         lastCode = code
         
@@ -66,7 +66,7 @@ extension OAuth2Service {
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURLString: Constant.defaultBaseURLString
+            baseURLString: Constant.baseURLString
         )
     }
 }

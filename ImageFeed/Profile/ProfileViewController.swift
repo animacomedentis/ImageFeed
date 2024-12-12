@@ -4,9 +4,10 @@ import Kingfisher
 final class ProfileViewController:UIViewController {
     
     
-    private var alertPresenter = AlertPresenter()
+    private let alertPresenter = AlertPresenter()
     private let profileService = ProfileService.shared
     private var storage = OAuth2TokenStorage.shared
+    private let logoutService = LogoutService.shared
     private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     
@@ -70,6 +71,7 @@ final class ProfileViewController:UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     private var userName: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
@@ -78,6 +80,7 @@ final class ProfileViewController:UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     private var bio: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
@@ -87,14 +90,9 @@ final class ProfileViewController:UIViewController {
         
         return label
     }()
+    
     private lazy var logoutButton: UIButton = {
-//        let button = UIButton.systemButton(
-//            with: UIImage(named: "logout_button")!,
-//            target: ProfileViewController.self,
-//            action: #selector(Self.didTapLogoutButton))
-//        button.tintColor = .ypRed
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        return button
+
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "logout_button"), for: .normal)
         button.tintColor = .ypRed
@@ -102,13 +100,31 @@ final class ProfileViewController:UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
     @objc
     private func didTapLogoutButton(){
-        print("logout")
+        self.logoutAlert()
     }
    
+    private func logoutAlert() {
+        let alert = UIAlertController(title: "Пока, пока!",
+                                      message: "Уверены что хотите выйти?",
+                                      preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .default))
+        alert.addAction(UIAlertAction(title: "Да", style: .default){ action in
+            self.logoutService.logout()
+            guard let window = UIApplication.shared.windows.first else { return }
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: .main),
+                vc = storyboard.instantiateViewController(identifier: "SplashViewController")
+            
+            window.rootViewController = vc
+        })
+        present(alert, animated: true)
+    }
     //MARK: -setup View + Constraints
-    
     private func setupView() {
         view.addSubview(avatarImage)
         view.addSubview(fullName)
@@ -154,6 +170,5 @@ final class ProfileViewController:UIViewController {
                                     + userNameConstraints
                                     + bioConstraints
                                     + logoutButtonConstraints)
-        
     }
 }

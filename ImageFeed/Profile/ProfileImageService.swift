@@ -44,6 +44,13 @@ final class ProfileImageService {
     private func makeRequest(username: String) -> URLRequest? {
         urlBilder.makeHTTPRequst(path: "/users/\(username)",
                                  httpMethod: "GET",
-                                 baseURLString: Constant.defaultBaseURLString)
+                                 baseURLString: Constant.baseURLString)
+    }
+}
+
+extension ProfileImageService {
+    func cleanSession() {
+        currentTask = nil
+        avatarURL = nil
     }
 }
