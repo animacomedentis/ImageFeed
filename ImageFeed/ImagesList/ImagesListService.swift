@@ -8,16 +8,25 @@ final class ImagesListService {
     private(set) var photos: [Photo] = []
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
+    private let dateFormatter = {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime]
+        return dateFormatter
+    }()
+    
     private init(){}
     
     func fetchPhotosNextPage(_ completion: @escaping (Result<String, Error>) -> Void) {
         
         assert(Thread.isMainThread)
-        task?.cancel()
+        
+        guard task == nil else { return }
         
         let nextPage = (lastLoadedPage ?? 0) + 1
         
-        guard let request = photosRequest(page: nextPage, perPage: 10) else { return }
+        guard let request = photosRequest(page: nextPage, perPage: 10) else {
+            completion(.failure(NetworkError.invalidRequest))
+            return }
         
         let session = URLSession.shared
         let task = session.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
@@ -35,9 +44,9 @@ final class ImagesListService {
                     completion(.failure(error))
                 }
             }
+            self.task = nil
         }
         self.task = task
-        
     }
     
     func changeLike(photoID: String, isLike: Bool, _ comletion: @escaping (Result<Void, Error>) -> Void){
@@ -93,7 +102,7 @@ final class ImagesListService {
     private func updatePhoto(_ updatePhoto: PhotoResult) -> Photo {
         return Photo.init(id: updatePhoto.id,
                           size: CGSize(width: updatePhoto.width, height: updatePhoto.height),
-                          createdAt:ISO8601DateFormatter().date(from: updatePhoto.createdAt ?? ""),
+                          createdAt: dateFormatter.date(from: updatePhoto.createdAt ?? ""),
                           welcomeDescription: updatePhoto.description,
                           thumbImageURL: updatePhoto.urls.thumb,
                           largeImageURL: updatePhoto.urls.full,
