@@ -1,8 +1,5 @@
 import Foundation
 
-fileprivate let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-
-
 public protocol WebViewPresenterProtocol {
     var view: WebViewControllerProtocol? {get set}
     func viewDidLoad()
@@ -14,41 +11,21 @@ final class WebViewPresenter: WebViewPresenterProtocol {
    
     weak var view: WebViewControllerProtocol?
     
+    var authHelper: AuthHelperProtocol
+    
+    init(authHelper: AuthHelperProtocol) {
+        self.authHelper = authHelper
+    }
+    
     func viewDidLoad() {
-        guard var urlComponents = URLComponents(string: UnsplashAuthorizeURLString) else {
-            print("Failed to make urlComponents")
-            return
-        }
-        
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constant.accessKey),
-            URLQueryItem(name: "redirect_uri", value: Constant.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constant.accessScope)
-        ]
-        guard let url = urlComponents.url else {
-            print("Failed to make URL")
-            return
-        }
-        
-        let request = URLRequest(url: url)
-        
-        didUpdateProgressValue(0)
-        
+        guard let request = authHelper.authRequest() else { return }
+                
         view?.load(request: request)
+        didUpdateProgressValue(0)
     }
     
     func code(from url: URL) -> String? {
-        if
-            let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == "/oauth/authorize/native",
-            let items = urlComponents.queryItems,
-            let codeItem = items.first(where: { $0.name == "code" })
-        {
-            return codeItem.value
-        } else {
-            return nil
-        }
+        authHelper.code(from: url)
     }
     
     func didUpdateProgressValue(_ newValue: Double) {
