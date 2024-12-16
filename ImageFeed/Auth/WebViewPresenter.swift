@@ -7,12 +7,11 @@ public protocol WebViewPresenterProtocol {
     var view: WebViewControllerProtocol? {get set}
     func viewDidLoad()
     func didUpdateProgressValue(_ newValue: Double)
-    func code(from url: URL?) -> String?
+    func code(from url: URL) -> String?
 }
 
 final class WebViewPresenter: WebViewPresenterProtocol {
    
-    
     weak var view: WebViewControllerProtocol?
     
     func viewDidLoad() {
