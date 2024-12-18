@@ -49,6 +49,7 @@ final class AuthViewController: UIViewController{
         loginButton.tintColor = .ypBlack
         loginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         loginButton.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
+        loginButton.accessibilityIdentifier = "Authenticate"
         
         //MARK: add subView and off mask
         authViewLogo.translatesAutoresizingMaskIntoConstraints = false
