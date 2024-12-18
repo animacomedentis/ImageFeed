@@ -2,9 +2,9 @@ import ImageFeed
 import Foundation
 
 final class ImagesListViewPresenterSpy: ImagesListViewPresenterProtocol {
-    var dateFormatter: DateFormatter = DateFormatter()
+    var view: ImageFeed.ImagesListViewControllerProtocol?
     
-    var view: (any ImageFeed.ImagesListViewControllerProtocol)?
+    var dateFormatter: DateFormatter = DateFormatter()
     var imagesListObserverCalled: Bool = false
     var updateTableViewCalled: Bool = false
     
@@ -12,8 +12,7 @@ final class ImagesListViewPresenterSpy: ImagesListViewPresenterProtocol {
         imagesListObserverCalled = true
     }
     
-    func updateTableView() {
+    func updeteTableView() {
         updateTableViewCalled = true
     }
 }
-

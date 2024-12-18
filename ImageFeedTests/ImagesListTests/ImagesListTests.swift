@@ -1,10 +1,9 @@
 @testable import ImageFeed
 import XCTest
-import Foundation
 
-final class ImagesListViewTests: XCTestCase {
+final class ImagesListTests: XCTestCase {
     
-    func testCallsObserver() {
+    func testCallObserver(){
         //Given
         let viewController =  ImagesListViewController()
         let presenter =  ImagesListViewPresenterSpy()
@@ -26,9 +25,10 @@ final class ImagesListViewTests: XCTestCase {
         presenter.view = viewController
         
         //When
-        presenter.updateTableView()
+        presenter.updeteTableView()
         
         //Then
         XCTAssertTrue(presenter.updateTableViewCalled)
+
     }
 }

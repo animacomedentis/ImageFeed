@@ -96,20 +96,8 @@
 		D5F40A512B1F31990047F1AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		757FA0372D134A310040C523 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				ImagesListTest/ImagesListTest.swift,
-				ImagesListTest/ImagesListViewControllerSpy.swift,
-				ImagesListTest/ImagesListViewPresenterSpy.swift,
-			);
-			target = 75822FA62D105EC80031AC78 /* ImageFeedTests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		75822FA82D105EC80031AC78 /* ImageFeedTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (757FA0372D134A310040C523 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ImageFeedTests; sourceTree = "<group>"; };
+		75822FA82D105EC80031AC78 /* ImageFeedTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ImageFeedTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
