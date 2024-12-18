@@ -1,10 +1,3 @@
-//
-//  Untitled.swift
-//  ImageFeed
-//
-//  Created by Максим Карпов on 16.12.2024.
-//
-
 import ImageFeed
 import Foundation
 

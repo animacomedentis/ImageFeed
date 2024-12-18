@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+
 final class ProfileImageService {
     static let shared = ProfileImageService()
     private let storage = OAuth2TokenStorage.shared
@@ -17,19 +18,18 @@ final class ProfileImageService {
         
         guard let request = makeRequest(username: username) else { return }
         let session = URLSession.shared
-        let task = session.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
+        let task = session.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }
             
             switch result {
             case .success(let json):
-                let mediumPhotoURL = json.profileImage.medium
-                self.avatarURL = mediumPhotoURL
-                completion(.success(mediumPhotoURL))
+                self.avatarURL = json.profileImageMediumURL.absoluteString
+                completion(.success(json.profileImageMediumURL.absoluteString))
                 
                 NotificationCenter.default.post(
                     name: ProfileImageService.didChangeNotification,
                     object: self,
-                    userInfo: ["URL": mediumPhotoURL])
+                    userInfo: ["URL": self.avatarURL ?? ""])
                 
             case .failure(let error):
                 completion(.failure(error))

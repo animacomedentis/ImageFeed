@@ -1,61 +1,95 @@
-import Foundation
+import WebKit
 
+struct Profile {
+    let userName: String
+    let name: String
+    let loginName: String
+    let bio: String
+    
+    init(from profileResult: ProfileResultResponseBody) {
+        self.userName = profileResult.userName
+        self.name = "\(profileResult.firstName) \(profileResult.lastName)"
+        self.loginName = "@\(profileResult.userName)"
+        self.bio = profileResult.bio ?? "No bio available"
+    }
+}
+
+enum ProfileServiceError: Error {
+    case invalidRequest
+}
 
 final class ProfileService {
     static let shared = ProfileService()
     
-    private let builder: URLRequestBilder
+    private init() {}
+    
     private(set) var profile: Profile?
-    private var currentTask: URLSessionTask?
-    private var task: URLSessionTask?
     
-    init(builder: URLRequestBilder = .shared) {
-        self.builder = builder
-    }
+    private var lastTask: URLSessionTask?
+    private var lastToken: String?
     
-    func fetchProfile(completion: @escaping (Result<Profile, Error>) -> Void) {
-        currentTask?.cancel()
+    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+        assert(Thread.isMainThread)
         
-        guard
-            let request = makeFetchProfileRequest()
-        else {
-            assertionFailure("Invalid Request")
-            completion(.failure(NetworkError.invalidRequest))
+        guard lastToken != token else {
+            completion( .failure(ProfileServiceError.invalidRequest))
             return
         }
-        let session = URLSession.shared
-        currentTask = session.objectTask(for: request) { [weak self] (response: Result<ProfileResult, Error>) in
-            guard let self = self else { return }
-            
-            self.currentTask = nil
-            
-            switch response {
-            case .success(let json):
-                let profile = Profile(username: json.userName,
-                                      name: "\(json.firstName) \(json.lastName)",
-                                      loginName: "@\(json.userName)",
-                                      bio: json.bio)
-                self.profile = profile
-                completion(.success(profile))
-            case .failure(let error):
-                completion(.failure(error))
+        
+        lastTask?.cancel()
+        lastToken = token
+        
+        guard let request = userPublicProfileRequest(token: token) else {
+            print("[ProfileService]: Error: Failed to request for token \(token)")
+            completion(.failure(NetworkError.urlSessionError))
+            return
+        }
+        
+        let urlSession = URLSession.shared
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResultResponseBody, Error>) in
+            DispatchQueue.main.async {
+                
+                self?.lastTask = nil
+                self?.lastToken = nil
+                
+                switch result {
+                case .success(let response):
+                    let profile = Profile(from: response)
+                    self?.profile = profile
+                    completion( .success(profile))
+                    
+                case .failure(let error):
+                    print("[ProfileService]: Error while fetching profile: \(error.localizedDescription)")
+                    completion( .failure(error))
+                }
             }
         }
+        
+        self.lastToken = token
+        task.resume()
     }
-}
-
-extension ProfileService {
-    func makeFetchProfileRequest () -> URLRequest? {
-        builder.makeHTTPRequst(path: "/me",
-                               httpMethod: "GET",
-                               baseURLString: Constant.baseURLString
-        )
+    
+    private func userPublicProfileRequest(token: String) -> URLRequest? {
+        let unsplashBaseURLString = "https://api.unsplash.com"
+        
+        guard let url = URL(string: "\(unsplashBaseURLString)/me") else {
+            print("Error: Failed to create urlComponents.Check unsplashBaseURLString")
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        print("Profile request URL: \(url.absoluteString)")
+        print("HTTP method: \(request.httpMethod ?? "nil")")
+        guard let authHeader = request.value(forHTTPHeaderField: "Authorization") else {
+            print("Error: Failed to get Authorization header.")
+            return nil
+        }
+        print("Authorization header: \(authHeader)")
+        
+        return request
     }
-}
-
-extension ProfileService {
-    func cleanSession() {
-        profile = nil
-        task = nil
-    }
+    
 }

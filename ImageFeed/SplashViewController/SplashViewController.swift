@@ -51,13 +51,13 @@ final class SplashViewController: UIViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
    
-    private func fetchProfile(complition: @escaping () -> Void) {
-        profileService.fetchProfile { [weak self] profileResult in
+    private func fetchProfile(_ token: String, complition: @escaping () -> Void) {
+        profileService.fetchProfile(token) { [weak self] profileResult in
             guard let self = self else { return }
 
             switch profileResult {
             case .success(let profile):
-                self.profileImageService.fetchProfileImageURL(username: profile.username) {_ in}
+                profileImageService.fetchProfileImageURL(username: profile.userName) {_ in}
             case .failure(let error):
                 showLoginAlert(error: error)
             }
@@ -73,7 +73,8 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     
     func didAuthenticate(_ vc: AuthViewController) {
-        fetchProfile { [weak self] in
+        guard let token = storage.token else { return}
+        fetchProfile(token) { [weak self] in
             self?.dismiss(animated: false)
             self? .switchToTabBarViewController()
         }
@@ -117,7 +118,7 @@ extension SplashViewController {
         checked = true
         if networkServices.isAuth {
             UIBlockingProgressHUD.show()
-            fetchProfile { [weak self] in
+            fetchProfile(storage.token!) { [weak self] in
                 UIBlockingProgressHUD.dismiss()
                 self?.switchToTabBarViewController()
             }
