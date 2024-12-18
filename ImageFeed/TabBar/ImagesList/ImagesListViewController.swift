@@ -1,7 +1,13 @@
 import UIKit
 import Kingfisher
 
-class ImagesListViewController: UIViewController, ImageListCellDelegate {
+public protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListViewPresenterProtocol? {get set}
+}
+
+class ImagesListViewController: UIViewController, ImageListCellDelegate, ImagesListViewControllerProtocol {
+    var presenter: ImagesListViewPresenterProtocol?
+    
    
     @IBOutlet private var tableView: UITableView!
     private let imageListService = ImagesListService.shared

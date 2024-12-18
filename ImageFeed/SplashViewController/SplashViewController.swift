@@ -9,6 +9,7 @@ final class SplashViewController: UIViewController {
     private let profileImageService = ProfileImageService.shared
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let showImagesListIdentifier = "ShowImagesList"
+    private let showImagesListViewControllerIdentifief = "ImagesListViewController"
     private let alertPresenter = AlertPresenter()
     private var checked: Bool = false
     
@@ -102,7 +103,7 @@ extension SplashViewController {
 extension SplashViewController {
     
     private func switchToTabBarViewController() {
-      dismiss(animated: false)
+        dismiss(animated: false)
         performSegue(withIdentifier: showImagesListIdentifier, sender: self)
     }
     
