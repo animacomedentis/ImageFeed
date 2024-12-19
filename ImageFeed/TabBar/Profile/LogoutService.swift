@@ -37,5 +37,3 @@ final class LogoutService {
         profileViewController.cleanProfileData()
     }
 }
-    
-

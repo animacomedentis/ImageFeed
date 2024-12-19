@@ -36,7 +36,6 @@ final class ImageFeedUITests: XCTestCase {
         
         let tablesQuery = app.tables
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
-        print(app.debugDescription)
         
         XCTAssertTrue(cell.waitForExistence(timeout: 5))
     }
@@ -67,20 +66,16 @@ final class ImageFeedUITests: XCTestCase {
         let navBackButtonWhiteButton = app.buttons["BackButton"]
         navBackButtonWhiteButton.tap()
     }
-
-        func testProfile() throws {
-            sleep(3)
-            app.tabBars.buttons.element(boundBy: 1).tap()
     
-            XCTAssertTrue(app.staticTexts[fullName].exists)
-            XCTAssertTrue(app.staticTexts[username].exists)
-    
-            app.buttons["logoutButton"].tap()
-    
-            app.alerts["Пока, пока!"].scrollViews.otherElements.buttons["Да"].tap()
-        }
+    func testProfile() throws {
+        sleep(3)
+        app.tabBars.buttons.element(boundBy: 1).tap()
+        
+        XCTAssertTrue(app.staticTexts[fullName].exists)
+        XCTAssertTrue(app.staticTexts[username].exists)
+        
+        app.buttons["logoutButton"].tap()
+        
+        app.alerts["Пока, пока!"].scrollViews.otherElements.buttons["Да"].tap()
+    }
 }
-
-
-
-

@@ -17,4 +17,3 @@ final class WebViewPresenterSpy: WebViewPresenterProtocol {
         return nil
     }
 }
-

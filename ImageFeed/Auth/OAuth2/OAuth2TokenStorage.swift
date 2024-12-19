@@ -14,22 +14,26 @@ final class OAuth2TokenStorage {
             return KeychainWrapper.standard.string(forKey: tokenKey)
         }
         set {
-            if let newValue = newValue {
-                let isSuccess = KeychainWrapper.standard.set(newValue, forKey: tokenKey)
-                guard isSuccess else {
-                    print("[OAuth2TokenStorage]: Error saving token to Keychain")
-                    return
-                }
+            if let newValue {
+                setSuccess(newValue: newValue)
             } else {
-                let isRemoved: Bool = KeychainWrapper.standard.removeObject(forKey: tokenKey)
-                guard isRemoved else {
-                    print("[OAuth2TokenStorage]: Error removing token from Keychain")
-                    return
-                }
+                setRemoved()
             }
         }
     }
     
+    private func setSuccess(newValue: String){
+        let isSuccess = KeychainWrapper.standard.set(newValue, forKey: tokenKey)
+        guard isSuccess else {
+            print("[OAuth2TokenStorage]: Error saving token to Keychain")
+            return
+        }
+    }
+    private func setRemoved() {
+        let isRemoved: Bool = KeychainWrapper.standard.removeObject(forKey: tokenKey)
+        guard isRemoved else {
+            print("[OAuth2TokenStorage]: Error removing token from Keychain")
+            return
+        }
+    }
 }
-
-

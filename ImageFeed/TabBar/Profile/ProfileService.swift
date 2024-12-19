@@ -1,22 +1,5 @@
 import WebKit
 
-struct Profile {
-    let userName: String
-    let name: String
-    let loginName: String
-    let bio: String
-    
-    init(from profileResult: ProfileResultResponseBody) {
-        self.userName = profileResult.userName
-        self.name = "\(profileResult.firstName) \(profileResult.lastName)"
-        self.loginName = "@\(profileResult.userName)"
-        self.bio = profileResult.bio ?? "No bio available"
-    }
-}
-
-enum ProfileServiceError: Error {
-    case invalidRequest
-}
 
 final class ProfileService {
     static let shared = ProfileService()
@@ -32,7 +15,7 @@ final class ProfileService {
         assert(Thread.isMainThread)
         
         guard lastToken != token else {
-            completion( .failure(ProfileServiceError.invalidRequest))
+            completion( .failure(NetworkError.invalidRequest))
             return
         }
         

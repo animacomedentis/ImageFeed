@@ -6,13 +6,12 @@ public protocol ImagesListViewControllerProtocol: AnyObject {
     func updateTableView(oldCount: Int, newCount: Int)
 }
 
-class ImagesListViewController: UIViewController, ImageListCellDelegate, ImagesListViewControllerProtocol {
+final class ImagesListViewController: UIViewController, ImageListCellDelegate, ImagesListViewControllerProtocol {
     var presenter: ImagesListViewPresenterProtocol?
     
    
     @IBOutlet private var tableView: UITableView!
     private let imageListService = ImagesListService.shared
-    //private var imageListServiceObserver: NSObjectProtocol?
     private var photos: [Photo] = []
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     
@@ -169,5 +168,3 @@ extension ImagesListViewController: UITableViewDelegate {
         return cellHeight
     }
 }
-
-

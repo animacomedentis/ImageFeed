@@ -55,7 +55,7 @@ final class WebViewTests: XCTestCase {
         let urlString = url!.absoluteString
         
         //then
-        XCTAssertTrue(urlString.contains(configuration.UnsplashAuthorizeURLString))
+        XCTAssertTrue(urlString.contains(configuration.unsplashAuthorizeURLString))
         XCTAssertTrue(urlString.contains(configuration.accessKey))
         XCTAssertTrue(urlString.contains(configuration.redirectURI))
         XCTAssertTrue(urlString.contains("code"))
@@ -76,5 +76,3 @@ final class WebViewTests: XCTestCase {
         XCTAssertEqual(code, "test code")
     }
 }
-
-
