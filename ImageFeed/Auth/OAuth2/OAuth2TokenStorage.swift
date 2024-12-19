@@ -1,28 +1,39 @@
 import Foundation
-import UIKit
 import SwiftKeychainWrapper
 
-struct OAuth2TokenStorage {
-    static var shared = OAuth2TokenStorage()
+final class OAuth2TokenStorage {
     
-    private enum Keys: String{
-        case token
-    }
+    static let shared = OAuth2TokenStorage()
     
-     var token: String? {
+    private init() {}
+    
+    private let tokenKey = "OAuthToken"
+    
+    var token: String? {
         get {
-            KeychainWrapper.standard.string(forKey: Keys.token.rawValue)
+            return KeychainWrapper.standard.string(forKey: tokenKey)
         }
         set {
-            guard let token = newValue else { return }
-            
-            let isSuccess = KeychainWrapper.standard.set(token, forKey: Keys.token.rawValue)
-            guard isSuccess else { fatalError() }
+            if let newValue {
+                setSuccess(newValue: newValue)
+            } else {
+                setRemoved()
+            }
         }
     }
-}
-extension OAuth2TokenStorage {
-    func cleanSession() {
-        KeychainWrapper.standard.removeAllKeys()
+    
+    private func setSuccess(newValue: String){
+        let isSuccess = KeychainWrapper.standard.set(newValue, forKey: tokenKey)
+        guard isSuccess else {
+            print("[OAuth2TokenStorage]: Error saving token to Keychain")
+            return
+        }
+    }
+    private func setRemoved() {
+        let isRemoved: Bool = KeychainWrapper.standard.removeObject(forKey: tokenKey)
+        guard isRemoved else {
+            print("[OAuth2TokenStorage]: Error removing token from Keychain")
+            return
+        }
     }
 }

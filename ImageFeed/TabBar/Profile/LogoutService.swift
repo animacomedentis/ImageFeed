@@ -9,6 +9,7 @@ final class LogoutService {
     
     func logout(){
         cleanCookies()
+        cleanToken()
         cleanProfile()
     }
     
@@ -22,12 +23,17 @@ final class LogoutService {
         }
     }
     
-    private func cleanProfile(){
-        ProfileService.shared.cleanSession()
-        ProfileImageService.shared.cleanSession()
-        ImagesListService.shared.cleanSession()
-        OAuth2TokenStorage().cleanSession()
+    private func cleanToken() {
+        if let token = OAuth2TokenStorage.shared.token {
+            print("[OAuth2TokenStorage]: Token found: \(token)")
+            OAuth2TokenStorage.shared.token = nil
+        } else {
+            print("[OAuth2TokenStorage]: No token found to remove")
+        }
+    }
+    
+    private func cleanProfile() {
+        let profileViewController = ProfileViewController()
+        profileViewController.cleanProfileData()
     }
 }
-    
-

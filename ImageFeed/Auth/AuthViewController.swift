@@ -18,7 +18,13 @@ final class AuthViewController: UIViewController{
         if segue.identifier == ShowWebViewSegueIdentifier {
             guard
                 let webViewViewController = segue.destination as? WebViewViewController
-            else { return assertionFailure("Failed to prepare for \(ShowWebViewSegueIdentifier)") }
+            else {
+                return assertionFailure("Failed to prepare for \(ShowWebViewSegueIdentifier)")
+            }
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+            webViewViewController.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
@@ -43,6 +49,7 @@ final class AuthViewController: UIViewController{
         loginButton.tintColor = .ypBlack
         loginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         loginButton.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
+        loginButton.accessibilityIdentifier = "Authenticate"
         
         //MARK: add subView and off mask
         authViewLogo.translatesAutoresizingMaskIntoConstraints = false

@@ -1,11 +1,17 @@
 import UIKit
 import Kingfisher
 
-class ImagesListViewController: UIViewController, ImageListCellDelegate {
+public protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListViewPresenterProtocol? {get set}
+    func updateTableView(oldCount: Int, newCount: Int)
+}
+
+final class ImagesListViewController: UIViewController, ImageListCellDelegate, ImagesListViewControllerProtocol {
+    var presenter: ImagesListViewPresenterProtocol?
+    
    
     @IBOutlet private var tableView: UITableView!
     private let imageListService = ImagesListService.shared
-    private var imageListServiceObserver: NSObjectProtocol?
     private var photos: [Photo] = []
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     
@@ -16,14 +22,7 @@ class ImagesListViewController: UIViewController, ImageListCellDelegate {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-        
-        imageListServiceObserver = NotificationCenter.default.addObserver(
-            forName: ImagesListService.didChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateTableView()
-            }
+        presenter?.imagesListObserver()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -44,22 +43,13 @@ class ImagesListViewController: UIViewController, ImageListCellDelegate {
         }
     }
     
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
-    
     private func loadPhotoPage() {
         imageListService.fetchPhotosNextPage{ _ in }
     }
     
-    private func updateTableView() {
-        if photos.count == imageListService.photos.count { return }
+    func updateTableView(oldCount: Int, newCount: Int) {
         tableView.performBatchUpdates {
-            let indexPath = (photos.count..<imageListService.photos.count).map { i in
+            let indexPath = (oldCount..<newCount).map { i in
                 IndexPath(row: i, section: 0)
             }
             tableView.insertRows(at: indexPath, with: .automatic)
@@ -91,7 +81,7 @@ extension ImagesListViewController {
         }
         
         if let date = photoURL.createdAt{
-            cell.dateLabel.text = dateFormatter.string(from: date)
+            cell.dateLabel.text = presenter?.dateFormatter.string(from: date)
         } else {
             cell.dateLabel.text = ""
         }
@@ -178,5 +168,3 @@ extension ImagesListViewController: UITableViewDelegate {
         return cellHeight
     }
 }
-
-

@@ -1,41 +1,32 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController:UIViewController {
-    
+protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? {get set}
+    func updateProfileDetails(profile: Profile)
+    func showLogoutAlert()
+    func updateAvatar()
+}
+
+final class ProfileViewController:UIViewController, ProfileViewControllerProtocol {
+    var presenter: ProfileViewPresenterProtocol?
     
     private let alertPresenter = AlertPresenter()
-    private let profileService = ProfileService.shared
     private var storage = OAuth2TokenStorage.shared
-    private let logoutService = LogoutService.shared
     private let profileImageService = ProfileImageService.shared
-    private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         setupView()
         setupConstraint()
-     
-        if let stringURL = profileImageService.avatarURL {
-            guard let url = URL(string: stringURL) else { return }
-            updateAvatar(url: url)
-        }
-        
-        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) { [weak self] notification in
-            guard let self = self else { return }
-            self.updateAvatar(notification: notification)
-        }
+        presenter?.viewDidLoad()
+        updateAvatar()
     }
+    func configure(_ presenter: ProfileViewPresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
+    }
+    //MARK: - viewContent
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        guard let profile = profileService.profile
-        else {
-            assertionFailure("no saved profile")
-            return }
-        updateViewContent(profile: profile)
-    }
-    //MARK: - view
     private var avatarImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "avatar")
@@ -44,22 +35,28 @@ final class ProfileViewController:UIViewController {
         return image
     }()
     
-    private func updateAvatar(notification: Notification)  {
+    func updateAvatar() {
         guard
-            isViewLoaded,
-            let userInfo = notification.userInfo,
-            let profileImageUrl = userInfo["URL"] as? String,
-            let url = URL(string: profileImageUrl)
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
         else { return }
         
-        updateAvatar(url: url)
-    }
-    
-    private func updateAvatar(url: URL) {
-        avatarImage.kf.indicatorType = .activity
-        avatarImage.kf.setImage(with: url)
-        let processor = RoundCornerImageProcessor(cornerRadius: 35)
-        avatarImage.kf.setImage(with: url, options: [.processor(processor)])
+        let processor = RoundCornerImageProcessor(cornerRadius: 20)
+        avatarImage.kf.setImage(with: url,
+                                     placeholder: UIImage(named: "placeholder"),
+                                     options: [.processor(processor)
+                                              ]) { result in
+            switch result{
+            case .success(let value):
+                print("Photo: \(value.image)")
+                print("Photo cache type: \(value.cacheType)")
+                print("Photo source: \(value.source)")
+                
+            case .failure(let error):
+                print("[ProfileViewController]: Error while loading profileImage \(error.localizedDescription)")
+            }
+        }
+        
     }
 
     
@@ -98,15 +95,16 @@ final class ProfileViewController:UIViewController {
         button.tintColor = .ypRed
         button.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.accessibilityIdentifier = "logoutButton"
         return button
     }()
     
     @objc
-    private func didTapLogoutButton(){
-        self.logoutAlert()
+    func didTapLogoutButton(){
+        presenter?.tapLogoutButton()
     }
    
-    private func logoutAlert() {
+    func showLogoutAlert() {
         let alert = UIAlertController(title: "Пока, пока!",
                                       message: "Уверены что хотите выйти?",
                                       preferredStyle: .alert
@@ -114,7 +112,7 @@ final class ProfileViewController:UIViewController {
         
         alert.addAction(UIAlertAction(title: "Нет", style: .default))
         alert.addAction(UIAlertAction(title: "Да", style: .default){ action in
-            self.logoutService.logout()
+            LogoutService.shared.logout()
             guard let window = UIApplication.shared.windows.first else { return }
             
             let storyboard = UIStoryboard(name: "Main", bundle: .main),
@@ -124,6 +122,7 @@ final class ProfileViewController:UIViewController {
         })
         present(alert, animated: true)
     }
+    
     //MARK: -setup View + Constraints
     private func setupView() {
         view.addSubview(avatarImage)
@@ -133,10 +132,17 @@ final class ProfileViewController:UIViewController {
         view.addSubview(logoutButton)
     }
     
-    private func updateViewContent (profile: Profile) {
+    func updateProfileDetails(profile: Profile) {
         fullName.text = profile.name
         userName.text = profile.loginName
         bio.text = profile.bio
+    }
+    
+    func cleanProfileData() {
+        fullName.text = nil
+        userName.text = nil
+        bio.text = nil
+        avatarImage.image = nil
     }
     
     private func setupConstraint() {
