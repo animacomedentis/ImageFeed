@@ -1,6 +1,5 @@
 import WebKit
 
-
 final class ProfileService {
     static let shared = ProfileService()
     
@@ -73,6 +72,5 @@ final class ProfileService {
         print("Authorization header: \(authHeader)")
         
         return request
-    }
-    
+    }    
 }
